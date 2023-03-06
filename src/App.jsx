@@ -11,7 +11,7 @@ const [pause,setPause ]= useState(false);
 const textRef = useRef(null);
 
 useEffect(()=>{
-  if(timeRemaining  > 0 && isTimeRemaining || pause){
+  if(timeRemaining  > 0 && isTimeRemaining){
     handleCount(text)
     setTimeout(()=>{
       setTimeRemaining(prev=>prev-1)
@@ -20,7 +20,7 @@ useEffect(()=>{
   else{
     endGame()
   }
-},[timeRemaining , isTimeRemaining  ])
+},[timeRemaining , isTimeRemaining ])
 
 function handleTimer(e){
    setTimer(e.target.value)
@@ -45,6 +45,7 @@ function startGame(){
    textRef.current.disabled=false
    textRef.current.focus();
    if(timeRemaining === 0) {
+    
     setText("")
     setTimeRemaining(timer);
    }
@@ -54,15 +55,17 @@ function startGame(){
 function pauseGame(){
   textRef.current.disabled=true;
   setIsTimeRemaining(false);
+  setPause(true)
 }
 
 function endGame(){
   setIsTimeRemaining(false);
+  handleCount(text)
 }
 
     return (
       <div>
-          <h1>How fast do you type in <input disabled={isTimeRemaining || !pause} type="number" onChange={handleTimer} className='time' name="timer" value={timer}/> seconds ?</h1>
+          <h1>How fast do you type in <input disabled={isTimeRemaining || pause} type="number" onChange={handleTimer} className='time' name="timer" value={timer}/> seconds ?</h1>
           <textarea value={text} ref={textRef} disabled={!isTimeRemaining} name="text" onChange={handleText}/>
           <h4>Time remaining:{timeRemaining}</h4>
           <button 
