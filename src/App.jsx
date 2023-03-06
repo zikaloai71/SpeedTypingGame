@@ -15,7 +15,10 @@ useEffect(()=>{
       setTimeRemaining(prev=>prev-1)
     },1000)
   }
-},[timeRemaining , isTimeRemaining ])
+  else{
+    endGame()
+  }
+},[timeRemaining , isTimeRemaining  ])
 
 function handleTimer(e){
    setTimer(e.target.value)
@@ -35,7 +38,12 @@ function handleCount(text){
 }
 function startGame(){
    setIsTimeRemaining(prev=>!prev)
-   handleCount(text)
+   setTimeRemaining(timer);
+}
+
+function endGame(){
+  setIsTimeRemaining(false);
+  handleCount(text)
 }
     return (
       <div>
