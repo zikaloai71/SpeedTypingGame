@@ -1,17 +1,30 @@
 // import { useState } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-const [number , setNumber ]=useState(10)
+const [timer , setTimer ]=useState(10)
 const [count,setCount]=useState(0)
 const [text ,setText]=useState("")
-function handleNumber(e){
-   setNumber(e.target.value)
+const [timeRemaining,setTimeRemaining]=useState(timer)
+const [isTimeRemaining,setIsTimeRemaining] = useState(false)
+
+useEffect(()=>{
+  if(timeRemaining  > 0 && isTimeRemaining){
+    setTimeout(()=>{
+      setTimeRemaining(prev=>prev-1)
+    },1000)
+  }
+},[timeRemaining , isTimeRemaining ])
+
+function handleTimer(e){
+   setTimer(e.target.value)
+   setTimeRemaining(e.target.value)
    if(e.target.value==="" || e.target.value < 0){
-    setNumber(0)
+   setTimer(0)
    }
 }
+
 function handleText(e){
  setText(e.target.value);
 }
@@ -20,18 +33,19 @@ function handleCount(text){
   const wordsArr = text.trim().split(" ");
   return setCount(wordsArr.filter(word => word !== "").length)
 }
-  function startGame(){
-    handleCount(text)
-  }
+function startGame(){
+   setIsTimeRemaining(prev=>!prev)
+   handleCount(text)
+}
     return (
       <div>
-          <h1>How fast do you type in <input type="number" onChange={handleNumber}className='time' name="number" value={number}/> seconds ?</h1>
+          <h1>How fast do you type in <input type="number" onChange={handleTimer} className='time' name="timer" value={timer}/> seconds ?</h1>
           <textarea value={text} name="text" onChange={handleText}/>
-          <h4>Time remaining:{number}</h4>
+          <h4>Time remaining:{timeRemaining}</h4>
           <button 
           onClick={startGame}
           >
-              Start
+             { isTimeRemaining ? "pause" : "start"}
           </button>
           <h1>Word count:{count}</h1>
       </div>
