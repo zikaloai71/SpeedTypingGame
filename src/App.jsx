@@ -2,13 +2,14 @@ import { useEffect, useState ,useRef} from 'react'
 import './App.css'
 
 function App() {
+const [endGameStatus,setEndGameStatus]=useState(false)
 const [timer , setTimer ]=useState(10)
 const [count,setCount]=useState(0)
 const [text ,setText]=useState("")
 const [timeRemaining,setTimeRemaining]=useState(timer)
 const [isTimeRemaining,setIsTimeRemaining] = useState(false)
-const [pause,setPause ]= useState(false);
-const textRef = useRef(null);
+const [pause,setPause ]= useState(false)
+const textRef = useRef(null)
 
 useEffect(()=>{
   if(timeRemaining  > 0 && isTimeRemaining){
@@ -25,17 +26,14 @@ useEffect(()=>{
 function handleTimer(e){
    setTimer(e.target.value)
    setTimeRemaining(e.target.value)
-   if(e.target.value==="" || e.target.value < 0){
-   setTimer(0)
-   }
 }
 
 function handleText(e){
- setText(e.target.value);
+ setText(e.target.value)
 }
 
 function handleCount(text){
-  const wordsArr = text.trim().split(" ");
+  const wordsArr = text.trim().split(" ")
   return setCount(wordsArr.filter(word => word !== "").length)
 }
 
@@ -43,31 +41,36 @@ function startGame(){
    setIsTimeRemaining(true)
    setPause(false)
    textRef.current.disabled=false
-   textRef.current.focus();
+   textRef.current.focus()
+   if(timer === '' || timer <=4){
+    setTimer(10)
+    setTimeRemaining(10)
+   }
    if(timeRemaining === 0) {
-    
     setText("")
-    setTimeRemaining(timer);
+    setTimeRemaining(timer)
    }
    
 }
 
 function pauseGame(){
-  textRef.current.disabled=true;
-  setIsTimeRemaining(false);
+  textRef.current.disabled=true
+  setIsTimeRemaining(false)
   setPause(true)
 }
 
 function resetGame(){
 setIsTimeRemaining(false)
 setPause(false)
+setEndGameStatus(false)
 setTimeRemaining(timer)
 setCount(0)
 setText("")
 }
 
 function endGame(){
-  setIsTimeRemaining(false);
+  setIsTimeRemaining(false)
+  setEndGameStatus(true)
   handleCount(text)
 }
 
@@ -75,7 +78,7 @@ function endGame(){
       <div>
           <h1>How fast do you type in <input disabled={isTimeRemaining || pause} type="number" onChange={handleTimer} className='time' name="timer" value={timer}/> seconds ?</h1>
           <textarea value={text} ref={textRef} disabled={!isTimeRemaining} name="text" onChange={handleText}/>
-          <h4>Time remaining:{isTimeRemaining || pause ?  timeRemaining : timer}</h4>
+          <h4>Time remaining:{isTimeRemaining || pause || endGameStatus ?  timeRemaining : timer}</h4>
           <div className='flex'>
           <button 
           onClick={isTimeRemaining ? pauseGame : startGame}
