@@ -17,7 +17,7 @@ useEffect(()=>{
       setTimeRemaining(prev=>prev-1)
     },1000)
   }
-  else{
+  else if(timeRemaining === 0){
     endGame()
   }
 },[timeRemaining , isTimeRemaining ])
@@ -58,6 +58,14 @@ function pauseGame(){
   setPause(true)
 }
 
+function resetGame(){
+setIsTimeRemaining(false)
+setPause(false)
+setTimeRemaining(timer)
+setCount(0)
+setText("")
+}
+
 function endGame(){
   setIsTimeRemaining(false);
   handleCount(text)
@@ -67,12 +75,19 @@ function endGame(){
       <div>
           <h1>How fast do you type in <input disabled={isTimeRemaining || pause} type="number" onChange={handleTimer} className='time' name="timer" value={timer}/> seconds ?</h1>
           <textarea value={text} ref={textRef} disabled={!isTimeRemaining} name="text" onChange={handleText}/>
-          <h4>Time remaining:{timeRemaining}</h4>
+          <h4>Time remaining:{isTimeRemaining || pause ?  timeRemaining : timer}</h4>
+          <div className='flex'>
           <button 
           onClick={isTimeRemaining ? pauseGame : startGame}
           >
-             { isTimeRemaining ? "pause" : "start"}
+             { isTimeRemaining ? "pause" : pause ? "continue" : 'start'}
           </button>
+          <button 
+          onClick={resetGame}
+          >
+             Reset
+          </button>
+          </div>
           <h1>Word count:{count}</h1>
       </div>
   )

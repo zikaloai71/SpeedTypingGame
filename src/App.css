@@ -45,7 +45,9 @@ textarea {
 textarea:disabled {
   background-color: #a5a2a2;
 }
-
+input:disabled{
+  background-color: black;
+}
 .time{
   font-family: 'Press Start 2P', cursive;
   background-color: rgb(255, 255, 255);
@@ -60,4 +62,8 @@ textarea:disabled {
   font-weight: bold;
   font-size: 1.5rem;
 
+}
+.flex{
+  display: flex;
+  justify-content: space-around;
 }
